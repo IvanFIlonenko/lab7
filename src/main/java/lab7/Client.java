@@ -1,18 +1,17 @@
 package lab7;
 
-import org.zeromq.SocketType;
-import org.zeromq.ZContext;
-import org.zeromq.ZMQ;
-
 import java.util.Random;
-import java.util.Scanner;
+
+import org.zeromq.SocketType;
+import org.zeromq.ZMQ;
+import org.zeromq.ZMQ.Socket;
+import org.zeromq.ZContext;
 
 public class Client {
     private static Random rand        = new Random();
     public static void main(String[] args){
         try (ZContext context = new ZContext()) {
             Socket worker = context.createSocket(SocketType.DEALER);
-            ZHelper.setId(worker); //  Set a printable identity
 
             worker.connect("tcp://localhost:5671");
 

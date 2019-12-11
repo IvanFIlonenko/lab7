@@ -48,7 +48,7 @@ public class Main
                         break; // Interrupted
                     ZFrame address = msg.pop();
                     address.destroy();
-                    //System.out.println(msg.getLast().toString());
+                    System.out.println(msg.getLast().toString());
                     msg.addFirst(new ZFrame("C"));
                     msg.send(frontend);
                 }

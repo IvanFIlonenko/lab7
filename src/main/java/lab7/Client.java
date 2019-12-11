@@ -7,11 +7,12 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZContext;
 
-public class Client extends Thread{
+class Client extends Thread {
     @Override
-    public void run(String[] args){
+    public void run() {
         try (ZContext context = new ZContext()) {
             Socket worker = context.createSocket(SocketType.DEALER);
+            ZHelper.setId(worker); //  Set a printable identity
 
             worker.connect("tcp://localhost:5671");
 

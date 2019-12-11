@@ -10,7 +10,7 @@ import org.zeromq.ZContext;
 /**
  * ROUTER-TO-REQ example
  */
-public class rtreq
+public class Main
 {
     private static Random    rand        = new Random();
     private static final int NBR_WORKERS = 10;

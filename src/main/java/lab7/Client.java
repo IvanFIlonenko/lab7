@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class Client
 {
-    private static int SAMPLE_SIZE = 10000;
 
     public static void main(String[] args)
     {
@@ -19,18 +18,8 @@ public class Client
             client.setIdentity("C".getBytes(ZMQ.CHARSET));
             client.connect("tcp://localhost:5555");
             System.out.println("Setting up test");
-            try {
-                Thread.sleep(100);
-            }
-            catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
 
-            int requests;
-            long start;
-
-            System.out.println("Synchronous round-trip test");
-            start = System.currentTimeMillis();
+            System.out.println("Client Started");
 
             Scanner in = new Scanner(System.in);
             while (true) {

@@ -4,6 +4,7 @@ import org.zeromq.*;
 import org.zeromq.ZMQ.Socket;
 
 import java.util.Scanner;
+import java.util.stream.StreamSupport;
 
 /**
 
@@ -47,6 +48,7 @@ public class Main
                         break; // Interrupted
                     ZFrame address = msg.pop();
                     address.destroy();
+                    System.out.println(msg.getLast().toString());
                     msg.addFirst(new ZFrame("C"));
                     msg.send(frontend);
                 }

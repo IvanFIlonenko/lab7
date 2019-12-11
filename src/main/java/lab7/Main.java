@@ -70,6 +70,7 @@ public class Main
                 worker.connect("tcp://localhost:5556");
                 while (!Thread.currentThread().isInterrupted()) {
                     ZMsg msg = ZMsg.recvMsg(worker);
+                    System.out.println(msg);
                     msg.send(worker);
                 }
             }
@@ -106,39 +107,19 @@ public class Main
                     ZMsg req = new ZMsg();
                     req.addString("hello");
                     req.send(client);
-                    ZMsg.recvMsg(client).destroy();
+                    ZMsg ans = ZMsg.recvMsg(client);
+                    System.out.println(ans);
                 }
 
                 long now = System.currentTimeMillis();
                 System.out.printf(
                         " %d calls/second\n", (1000 * SAMPLE_SIZE) / (now - start)
                 );
-
-                System.out.println("Asynchronous round-trip test");
-                start = System.currentTimeMillis();
-
-                for (requests = 0; requests < SAMPLE_SIZE; requests++) {
-                    ZMsg req = new ZMsg();
-                    req.addString("hello");
-                    req.send(client);
-                }
-
-                for (requests = 0;
-                     requests < SAMPLE_SIZE && !Thread.currentThread()
-                             .isInterrupted();
-                     requests++) {
-                    ZMsg.recvMsg(client).destroy();
-                }
-
-                long now2 = System.currentTimeMillis();
-                System.out.printf(
-                        " %d calls/second\n", (1000 * SAMPLE_SIZE) / (now2 - start)
-                );
             }
         }
     }
 
-    
+
     public static void main(String[] args)
     {
         if (args.length == 1)

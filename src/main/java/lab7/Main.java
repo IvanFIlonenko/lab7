@@ -109,6 +109,7 @@ public class Main
                     req.send(client);
                     ZMsg ans = ZMsg.recvMsg(client);
                     System.out.println(ans);
+                    ans.destroy();
                 }
 
                 long now = System.currentTimeMillis();

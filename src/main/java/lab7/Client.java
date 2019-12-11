@@ -14,7 +14,7 @@ public class Client extends Thread {
             Socket worker = context.createSocket(SocketType.DEALER);
 
             worker.connect("tcp://localhost:5671");
-
+            Random    rand        = new Random();
             int total = 0;
             while (true) {
                 //  Tell the broker we're ready for work

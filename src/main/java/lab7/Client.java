@@ -41,6 +41,9 @@ public class Client extends Thread {
     }
 
     public static void main(String[] args){
-        
+        for (int workerNbr = 0; workerNbr < 2; workerNbr++) {
+            Thread worker = new Client();
+            worker.start();
+        }
     }
 }

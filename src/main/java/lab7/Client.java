@@ -9,7 +9,7 @@ import org.zeromq.ZContext;
 
 public class Client extends Thread{
     @Override
-    public static void run(String[] args){
+    public void run(String[] args){
         try (ZContext context = new ZContext()) {
             Socket worker = context.createSocket(SocketType.DEALER);
 

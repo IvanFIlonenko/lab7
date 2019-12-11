@@ -13,17 +13,61 @@ import org.zeromq.ZContext;
 public class Main
 {
     private static Random    rand        = new Random();
-    private static final int NBR_WORKERS = 1;
+    private static final int NBR_WORKERS = 2;
+
+    private static class Worker extends Thread
+    {
+        @Override
+        public void run()
+        {
+            try (ZContext context = new ZContext()) {
+                Socket worker = context.createSocket(SocketType.DEALER);
+
+
+                worker.connect("tcp://localhost:5671");
+
+                int total = 0;
+                while (true) {
+                    //  Tell the broker we're ready for work
+                    worker.sendMore("");
+                    worker.send("Hi Boss");
+
+                    //  Get workload from broker, until finished
+                    worker.recvStr(); //  Envelope delimiter
+                    String workload = worker.recvStr();
+                    boolean finished = workload.equals("Fired!");
+                    if (finished) {
+                        System.out.printf("Completed: %d tasks\n", total);
+                        break;
+                    }
+                    total++;
+
+                    //  Do some random work
+                    try {
+                        Thread.sleep(rand.nextInt(500) + 1);
+                    }
+                    catch (InterruptedException e) {
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * While this example runs in a single process, that is just to make
      * it easier to start and stop the example. Each thread has its own
      * context and conceptually acts as a separate process.
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception
+    {
         try (ZContext context = new ZContext()) {
             Socket broker = context.createSocket(SocketType.ROUTER);
             broker.bind("tcp://*:5671");
+
+            for (int workerNbr = 0; workerNbr < NBR_WORKERS; workerNbr++) {
+                Thread worker = new Worker();
+                worker.start();
+            }
 
             //  Run for five seconds and then tell workers to end
             long endTime = System.currentTimeMillis() + 5000;

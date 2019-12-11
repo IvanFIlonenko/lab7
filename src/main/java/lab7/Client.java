@@ -19,6 +19,7 @@ public class Client {
             int total = 0;
             while (true) {
                 //  Tell the broker we're ready for work
+                worker.sendMore("");
                 String s = in.nextLine();
                 worker.send(s);
 

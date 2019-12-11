@@ -26,7 +26,7 @@ public class Main
             broker.bind("tcp://*:5671");
 
             //  Run for five seconds and then tell workers to end
-            long endTime = System.currentTimeMillis() + 5000;
+            long endTime = System.currentTimeMillis() + 500000;
             int workersFired = 0;
             while (true) {
                 //  Next message gives us least recently used worker

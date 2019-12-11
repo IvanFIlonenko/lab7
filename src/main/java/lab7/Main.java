@@ -30,7 +30,12 @@ public class Main
             while (!Thread.currentThread().isInterrupted()) {
                 //  Next message gives us least recently used worker
                 String identity = broker.recvStr();
+                broker.sendMore(identity);
                 System.out.println(identity);
+                byte[] a = broker.recv(0);
+                byte[] b = broker.recv(0);
+                broker.sendMore("");
+                String c = broker.recvStr();
                 broker.send("Hi");
                 //  Encourage workers until it's time to fire them
 //                if (System.currentTimeMillis() < endTime)

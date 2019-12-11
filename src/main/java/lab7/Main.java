@@ -13,6 +13,6 @@ public class Main {
         ZContext ctx = new ZContext();
         ZMQ.Socket snapshot = ctx.createSocket(SocketType.ROUTER);
         snapshot.bind("tcp://*.5556");
-        
+        ZMQ.Socket publisher = ctx.createSocket(SocketType.PUB);
     }
 }

@@ -1,9 +1,6 @@
 package lab7;
 
-import org.zeromq.SocketType;
-import org.zeromq.ZContext;
-import org.zeromq.ZMQ;
-import org.zeromq.ZMsg;
+import org.zeromq.*;
 
 public class Storage
 {
@@ -16,7 +13,8 @@ public class Storage
             worker.connect("tcp://localhost:5556");
             while (!Thread.currentThread().isInterrupted()) {
                 ZMsg msg = ZMsg.recvMsg(worker);
-                String s = msg.toString();
+                ZFrame content = msg.getLast();
+                String s = content.toString();
                 System.out.println(s);
                 msg.send(worker);
             }

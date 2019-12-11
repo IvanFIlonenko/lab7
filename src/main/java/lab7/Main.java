@@ -48,9 +48,14 @@ public class Main
                         break; // Interrupted
                     ZFrame address = msg.pop();
                     address.destroy();
-                    System.out.println(msg.getLast().toString());
-                    msg.addFirst(new ZFrame("C"));
-                    msg.send(frontend);
+                    String s = msg.getLast().toString();
+                    if (s.equals("0-10"))
+                        System.out.println(s);
+                    else {
+                        System.out.println(msg.getLast().toString());
+                        msg.addFirst(new ZFrame("C"));
+                        msg.send(frontend);
+                    }
                 }
 
                 items.close();

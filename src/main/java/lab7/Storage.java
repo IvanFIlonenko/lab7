@@ -16,8 +16,8 @@ public class Storage
             worker.connect("tcp://localhost:5556");
             while (!Thread.currentThread().isInterrupted()) {
                 ZMsg msg = ZMsg.recvMsg(worker);
-                //String s = msg.popString();
-                System.out.println(msg);
+                String s = msg.toString();
+                System.out.println(s);
                 msg.send(worker);
             }
         }

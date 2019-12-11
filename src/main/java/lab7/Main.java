@@ -32,6 +32,7 @@ public class Main
             while (true) {
                 //  Next message gives us least recently used worker
                 String identity = broker.recvStr();
+                System.out.println(identity);
                 broker.sendMore(identity);
                 String a = broker.recvStr(); //  Envelope delimiter
                 System.out.println(a);

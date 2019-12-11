@@ -5,10 +5,9 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMsg;
 
-static class Worker implements Runnable
+public class Storage
 {
-    @Override
-    public void run()
+    public void main(String[] args)
     {
         try (ZContext ctx = new ZContext()) {
             ZMQ.Socket worker = ctx.createSocket(SocketType.DEALER);

@@ -10,35 +10,6 @@ import java.util.Scanner;
 public class Client {
     private static Random rand        = new Random();
     public static void main(String[] args){
-        try (ZContext context = new ZContext()) {
-            Socket worker = context.createSocket(SocketType.DEALER);
-            ZHelper.setId(worker); //  Set a printable identity
 
-            worker.connect("tcp://localhost:5671");
-
-            int total = 0;
-            while (true) {
-                //  Tell the broker we're ready for work
-                worker.sendMore("");
-                worker.send("Hi Boss");
-
-                //  Get workload from broker, until finished
-                worker.recvStr(); //  Envelope delimiter
-                String workload = worker.recvStr();
-                boolean finished = workload.equals("Fired!");
-                if (finished) {
-                    System.out.printf("Completed: %d tasks\n", total);
-                    break;
-                }
-                total++;
-
-                //  Do some random work
-                try {
-                    Thread.sleep(rand.nextInt(500) + 1);
-                }
-                catch (InterruptedException e) {
-                }
-            }
-        }
     }
 }

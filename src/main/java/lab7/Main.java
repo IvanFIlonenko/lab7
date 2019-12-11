@@ -13,38 +13,37 @@ import org.zeromq.ZContext;
 public class Main
 {
     private static Random    rand        = new Random();
-    private static final int NBR_WORKERS = 2;
+    private static final int NBR_WORKERS = 1;
 
     /**
      * While this example runs in a single process, that is just to make
      * it easier to start and stop the example. Each thread has its own
      * context and conceptually acts as a separate process.
      */
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         try (ZContext context = new ZContext()) {
             Socket broker = context.createSocket(SocketType.ROUTER);
             broker.bind("tcp://*:5671");
 
             //  Run for five seconds and then tell workers to end
-            while (!Thread.currentThread().isInterrupted()) {
+            long endTime = System.currentTimeMillis() + 5000;
+            int workersFired = 0;
+            while (true) {
                 //  Next message gives us least recently used worker
                 String identity = broker.recvStr();
                 broker.sendMore(identity);
-                System.out.println(identity);
-                byte[] a = broker.recv(0);
-                byte[] b = broker.recv(0);
+                broker.recv(0); //  Envelope delimiter
+                broker.recv(0); //  Response from worker
                 broker.sendMore("");
-                String c = broker.recvStr();
-                broker.send("Hi");
+
                 //  Encourage workers until it's time to fire them
-//                if (System.currentTimeMillis() < endTime)
-//                    broker.send("Work harder");
-//                else {
-//                    broker.send("Fired!");
-//                    if (++workersFired == NBR_WORKERS)
-//                        break;
-//                }
+                if (System.currentTimeMillis() < endTime)
+                    broker.send("Work harder");
+                else {
+                    broker.send("Fired!");
+                    if (++workersFired == NBR_WORKERS)
+                        break;
+                }
             }
         }
     }

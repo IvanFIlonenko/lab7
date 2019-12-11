@@ -4,8 +4,11 @@ import org.zeromq.*;
 
 public class Storage
 {
+    private static String str;
+
     public static void main(String[] args)
     {
+        str = args[0].substring(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
         try (ZContext ctx = new ZContext()) {
             ZMQ.Socket worker = ctx.createSocket(SocketType.DEALER);
             worker.setHWM(0);

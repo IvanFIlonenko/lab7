@@ -11,6 +11,8 @@ public class Main {
 
     public void run(){
         ZContext ctx = new ZContext();
-        ZMQ.Socket snapshot = ctx.createSocket(SocketType.)
+        ZMQ.Socket snapshot = ctx.createSocket(SocketType.ROUTER);
+        snapshot.bind("tcp://*.5556");
+        
     }
 }

@@ -99,20 +99,20 @@ public class Main
                 int requests;
                 long start;
 
-//                System.out.println("Synchronous round-trip test");
-//                start = System.currentTimeMillis();
-//
-//                for (requests = 0; requests < SAMPLE_SIZE; requests++) {
-//                    ZMsg req = new ZMsg();
-//                    req.addString("hello");
-//                    req.send(client);
-//                    ZMsg.recvMsg(client).destroy();
-//                }
-//
-//                long now = System.currentTimeMillis();
-//                System.out.printf(
-//                        " %d calls/second\n", (1000 * SAMPLE_SIZE) / (now - start)
-//                );
+                System.out.println("Synchronous round-trip test");
+                start = System.currentTimeMillis();
+
+                for (requests = 0; requests < SAMPLE_SIZE; requests++) {
+                    ZMsg req = new ZMsg();
+                    req.addString("hello");
+                    req.send(client);
+                    ZMsg.recvMsg(client).destroy();
+                }
+
+                long now = System.currentTimeMillis();
+                System.out.printf(
+                        " %d calls/second\n", (1000 * SAMPLE_SIZE) / (now - start)
+                );
 
                 System.out.println("Asynchronous round-trip test");
                 start = System.currentTimeMillis();

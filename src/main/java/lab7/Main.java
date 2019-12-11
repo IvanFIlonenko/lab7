@@ -84,7 +84,7 @@ public class Main
         public void run()
         {
             try (ZContext ctx = new ZContext()) {
-                Socket client = ctx.createSocket(SocketType.DEALER);
+                Socket client = ctx.createSocket(SocketType.REQ);
                 client.setHWM(0);
                 client.setIdentity("C".getBytes(ZMQ.CHARSET));
                 client.connect("tcp://localhost:5555");

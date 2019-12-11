@@ -108,7 +108,8 @@ public class Main
                     req.addString("hello");
                     req.send(client);
                     ZMsg ans = ZMsg.recvMsg(client);
-                    System.out.println(ans.popString());
+                    String s = ans.popString();
+                    System.out.println(s);
                     ans.destroy();
                 }
 

@@ -23,15 +23,12 @@ public class Main
             backend.setHWM(0);
             frontend.bind("tcp://*:5555");
             backend.bind("tcp://*:5556");
+            ZMQ.Poller items = ctx.createPoller(2);
+            items.register(frontend, ZMQ.Poller.POLLIN);
+            items.register(backend, ZMQ.Poller.POLLIN);
 
             while (!Thread.currentThread().isInterrupted()) {
-                ZMQ.Poller items = ctx.createPoller(2);
-                items.register(backend, ZMQ.Poller.POLLIN);
-                items.register(frontend, ZMQ.Poller.POLLIN);
-
-                if (items.poll() == -1)
-                    break; // Interrupted
-
+                items.poll();
                 if (items.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(frontend);
                     if (msg == null)
@@ -57,8 +54,6 @@ public class Main
                         msg.send(frontend);
                     }
                 }
-
-                items.close();
             }
         }
     }

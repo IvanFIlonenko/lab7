@@ -8,7 +8,7 @@ import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZContext;
 
 public class Client extends Thread{
-    private static Random rand        = new Random();
+    @Override
     public static void run(String[] args){
         try (ZContext context = new ZContext()) {
             Socket worker = context.createSocket(SocketType.DEALER);

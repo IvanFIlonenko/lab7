@@ -132,17 +132,17 @@ public class Main
 
         Thread brokerThread = new Thread(new Broker());
         Thread workerThread = new Thread(new Worker());
-        Thread clientThread = new Thread(new Client());
+        //Thread clientThread = new Thread(new Client());
 
         brokerThread.setDaemon(true);
         workerThread.setDaemon(true);
 
         brokerThread.start();
         workerThread.start();
-        clientThread.start();
+        //clientThread.start();
 
         try {
-            clientThread.join();
+            //clientThread.join();
             workerThread.interrupt();
             brokerThread.interrupt();
             Thread.sleep(200);// give them some time

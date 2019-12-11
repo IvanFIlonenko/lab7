@@ -1,3 +1,5 @@
+package lab7;
+
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
@@ -5,12 +7,11 @@ import org.zeromq.ZMsg;
 
 import java.util.Scanner;
 
-static class Client implements Runnable
+public class Client
 {
     private static int SAMPLE_SIZE = 10000;
 
-    @Override
-    public void run()
+    public static void main(String[] args)
     {
         try (ZContext ctx = new ZContext()) {
             ZMQ.Socket client = ctx.createSocket(SocketType.REQ);

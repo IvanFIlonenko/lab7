@@ -3,6 +3,8 @@ package lab7;
 import org.zeromq.*;
 import org.zeromq.ZMQ.Socket;
 
+import java.util.Scanner;
+
 /**
 
  Round-trip demonstrator. Broker, Worker and Client are mocked as separate
@@ -104,20 +106,20 @@ public class Main
                 System.out.println("Synchronous round-trip test");
                 start = System.currentTimeMillis();
 
-                for (requests = 0; requests < SAMPLE_SIZE; requests++) {
+                Scanner in = new Scanner(System.in);
+                while (true) {
+                    String message = in.nextLine();
+                    if (message.equals("Stop")) {
+                        break;
+                    }
                     ZMsg req = new ZMsg();
-                    req.addString("hello");
+                    req.addString(message);
                     req.send(client);
                     ZMsg ans = ZMsg.recvMsg(client);
                     String s = ans.popString();
                     System.out.println(s);
                     ans.destroy();
                 }
-
-                long now = System.currentTimeMillis();
-                System.out.printf(
-                        " %d calls/second\n", (1000 * SAMPLE_SIZE) / (now - start)
-                );
             }
         }
     }

@@ -20,12 +20,12 @@ public class Storage
             worker.connect("tcp://localhost:5556");
             long start = System.currentTimeMillis();
             while (!Thread.currentThread().isInterrupted()) {
-                if (System.currentTimeMillis() - start > 5000) {
-                    ZMsg msg = new ZMsg();
-                    msg.addLast(left + "-" + right);
-                    msg.send(worker);
-                    start = System.currentTimeMillis();
-                }
+//                if (System.currentTimeMillis() - start > 5000) {
+//                    ZMsg msg = new ZMsg();
+//                    msg.addLast(left + "-" + right);
+//                    msg.send(worker);
+//                    start = System.currentTimeMillis();
+//                }
                 ZMsg msg = ZMsg.recvMsg(worker);
                 ZFrame content = msg.getLast();
                 String s = content.toString();

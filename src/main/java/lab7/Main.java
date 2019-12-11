@@ -31,7 +31,7 @@ public class Main
                 //  Next message gives us least recently used worker
                 String identity = broker.recvStr();
                 System.out.println(identity);
-                broker.send(identity);
+                broker.send("Hi");
                 //  Encourage workers until it's time to fire them
 //                if (System.currentTimeMillis() < endTime)
 //                    broker.send("Work harder");

@@ -1,96 +1,166 @@
 package lab7;
 
-import org.zeromq.ZMQ;
-
-import java.util.Random;
+import org.zeromq.*;
+import org.zeromq.ZMQ.Socket;
 
 /**
- * ROUTER-TO-REQ example
+
+ Round-trip demonstrator. Broker, Worker and Client are mocked as separate
+ threads.
+
  */
-public class Main {
-    private static Random rand = new Random();
-    private static final int NBR_WORKERS = 10;
-
-    private static class Worker extends Thread {
-
-        private String workerId;
-
-        Worker(String workerId) {
-            this.workerId = workerId;
-        }
-
+public class Main
+{
+    static class Broker implements Runnable
+    {
         @Override
-        public void run() {
-            ZMQ.Context context = ZMQ.context(1);
-            ZMQ.Socket worker = context.socket(ZMQ.REQ);
-            worker.setIdentity(workerId.getBytes());
+        public void run()
+        {
+            try (ZContext ctx = new ZContext()) {
+                Socket frontend = ctx.createSocket(SocketType.ROUTER);
+                Socket backend = ctx.createSocket(SocketType.ROUTER);
+                frontend.setHWM(0);
+                backend.setHWM(0);
+                frontend.bind("tcp://*:5555");
+                backend.bind("tcp://*:5556");
 
-            worker.connect("tcp://localhost:5671");
+                while (!Thread.currentThread().isInterrupted()) {
+                    ZMQ.Poller items = ctx.createPoller(2);
+                    items.register(frontend, ZMQ.Poller.POLLIN);
+                    items.register(backend, ZMQ.Poller.POLLIN);
 
-            int total = 0;
-            while (true) {
-                //  Tell the broker we're ready for work
-                worker.send("Hi Boss");
+                    if (items.poll() == -1)
+                        break; // Interrupted
 
-                //  Get workload from broker, until finished
-                String workload = worker.recvStr();
-                boolean finished = workload.equals("Fired!");
-                if (finished) {
-                    System.out.printf(workerId + " completed: %d tasks\n", total);
-                    break;
-                }
-                total++;
+                    if (items.pollin(0)) {
+                        ZMsg msg = ZMsg.recvMsg(frontend);
+                        if (msg == null)
+                            break; // Interrupted
+                        ZFrame address = msg.pop();
+                        address.destroy();
+                        msg.addFirst(new ZFrame("W"));
+                        msg.send(backend);
+                    }
 
-                //  Do some random work
-                try {
-                    Thread.sleep(rand.nextInt(500) + 1);
-                } catch (InterruptedException e) {
+                    if (items.pollin(1)) {
+                        ZMsg msg = ZMsg.recvMsg(backend);
+                        if (msg == null)
+                            break; // Interrupted
+                        ZFrame address = msg.pop();
+                        address.destroy();
+                        msg.addFirst(new ZFrame("C"));
+                        msg.send(frontend);
+                    }
+
+                    items.close();
                 }
             }
-
-            worker.close();
-            context.term();
         }
     }
 
-    /**
-     * While this example runs in a single process, that is just to make
-     * it easier to start and stop the example. Each thread has its own
-     * context and conceptually acts as a separate process.
-     */
-    public static void main(String[] args) throws Exception {
-        ZMQ.Context context = ZMQ.context(1);
-        ZMQ.Socket broker = context.socket(ZMQ.ROUTER);
-        broker.bind("tcp://*:5671");
-
-        // starting all workers
-        for (int workerNbr = 0; workerNbr < NBR_WORKERS; workerNbr++) {
-            Thread worker = new Worker("worker-" + workerNbr);
-            worker.start();
-        }
-
-        //  Run for five seconds and then tell workers to end
-        long endTime = System.currentTimeMillis() + 5000;
-        int workersFired = 0;
-        while (true) {
-            //  Next message gives us least recently used worker
-            String identity = broker.recvStr();
-            broker.sendMore(identity);
-            broker.recvStr();     //  Envelope delimiter
-            broker.recvStr();     //  Response from worker
-            broker.sendMore("");
-
-            //  Encourage workers until it's time to fire them
-            if (System.currentTimeMillis() < endTime)
-                broker.send("Work harder");
-            else {
-                broker.send("Fired!");
-                if (++workersFired == NBR_WORKERS)
-                    break;
+    static class Worker implements Runnable
+    {
+        @Override
+        public void run()
+        {
+            try (ZContext ctx = new ZContext()) {
+                Socket worker = ctx.createSocket(SocketType.DEALER);
+                worker.setHWM(0);
+                worker.setIdentity("W".getBytes(ZMQ.CHARSET));
+                worker.connect("tcp://localhost:5556");
+                while (!Thread.currentThread().isInterrupted()) {
+                    ZMsg msg = ZMsg.recvMsg(worker);
+                    msg.send(worker);
+                }
             }
         }
+    }
 
-        broker.close();
-        context.term();
+    static class Client implements Runnable
+    {
+        private static int SAMPLE_SIZE = 10000;
+
+        @Override
+        public void run()
+        {
+            try (ZContext ctx = new ZContext()) {
+                Socket client = ctx.createSocket(SocketType.DEALER);
+                client.setHWM(0);
+                client.setIdentity("C".getBytes(ZMQ.CHARSET));
+                client.connect("tcp://localhost:5555");
+                System.out.println("Setting up test");
+                try {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                int requests;
+                long start;
+
+                System.out.println("Synchronous round-trip test");
+                start = System.currentTimeMillis();
+
+                for (requests = 0; requests < SAMPLE_SIZE; requests++) {
+                    ZMsg req = new ZMsg();
+                    req.addString("hello");
+                    req.send(client);
+                    ZMsg.recvMsg(client).destroy();
+                }
+
+                long now = System.currentTimeMillis();
+                System.out.printf(
+                        " %d calls/second\n", (1000 * SAMPLE_SIZE) / (now - start)
+                );
+
+                System.out.println("Asynchronous round-trip test");
+                start = System.currentTimeMillis();
+
+                for (requests = 0; requests < SAMPLE_SIZE; requests++) {
+                    ZMsg req = new ZMsg();
+                    req.addString("hello");
+                    req.send(client);
+                }
+
+                for (requests = 0;
+                     requests < SAMPLE_SIZE && !Thread.currentThread()
+                             .isInterrupted();
+                     requests++) {
+                    ZMsg.recvMsg(client).destroy();
+                }
+
+                long now2 = System.currentTimeMillis();
+                System.out.printf(
+                        " %d calls/second\n", (1000 * SAMPLE_SIZE) / (now2 - start)
+                );
+            }
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        if (args.length == 1)
+            Client.SAMPLE_SIZE = Integer.parseInt(args[0]);
+
+        Thread brokerThread = new Thread(new Broker());
+        Thread workerThread = new Thread(new Worker());
+        Thread clientThread = new Thread(new Client());
+
+        brokerThread.setDaemon(true);
+        workerThread.setDaemon(true);
+
+        brokerThread.start();
+        workerThread.start();
+        clientThread.start();
+
+        try {
+            clientThread.join();
+            workerThread.interrupt();
+            brokerThread.interrupt();
+            Thread.sleep(200);// give them some time
+        }
+        catch (InterruptedException e) {
+        }
     }
 }

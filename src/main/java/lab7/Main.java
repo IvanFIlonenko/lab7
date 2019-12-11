@@ -26,8 +26,8 @@ public class Main
 
             while (!Thread.currentThread().isInterrupted()) {
                 ZMQ.Poller items = ctx.createPoller(2);
-                items.register(frontend, ZMQ.Poller.POLLIN);
                 items.register(backend, ZMQ.Poller.POLLIN);
+                items.register(frontend, ZMQ.Poller.POLLIN);
 
                 if (items.poll() == -1)
                     break; // Interrupted

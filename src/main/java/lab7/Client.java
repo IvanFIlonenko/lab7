@@ -7,7 +7,7 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZContext;
 
-public class Client {
+public class Client extends Thread{
     private static Random rand        = new Random();
     public static void main(String[] args){
         try (ZContext context = new ZContext()) {

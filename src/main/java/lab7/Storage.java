@@ -14,6 +14,7 @@ public class Storage
             worker.setHWM(0);
             worker.setIdentity("W".getBytes(ZMQ.CHARSET));
             worker.connect("tcp://localhost:5556");
+            long start = System.currentTimeMillis();
             while (!Thread.currentThread().isInterrupted()) {
                 ZMsg msg = ZMsg.recvMsg(worker);
                 ZFrame content = msg.getLast();

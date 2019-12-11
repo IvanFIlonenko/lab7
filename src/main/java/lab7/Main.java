@@ -13,7 +13,7 @@ import org.zeromq.ZContext;
 public class Main
 {
     private static Random    rand        = new Random();
-    private static final int NBR_WORKERS = 10;
+    private static final int NBR_WORKERS = 2;
 
     private static class Worker extends Thread
     {

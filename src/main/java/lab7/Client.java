@@ -4,7 +4,10 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
+import java.util.Random;
+
 public class Client {
+    private static Random rand        = new Random();
     public static void main(String[] args){
         try (ZContext context = new ZContext()) {
             ZMQ.Socket worker = context.createSocket(SocketType.REQ);

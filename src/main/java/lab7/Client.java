@@ -1,28 +1,28 @@
 package lab7;
 
-import java.util.Random;
-
 import org.zeromq.SocketType;
-import org.zeromq.ZMQ;
-import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZContext;
+import org.zeromq.ZMQ;
 
-public class Client extends Thread {
-    @Override
-    public void run() {
+import java.util.Random;
+import java.util.Scanner;
+
+public class Client {
+    private static Random rand        = new Random();
+    public static void main(String[] args){
         try (ZContext context = new ZContext()) {
-            Socket worker = context.createSocket(SocketType.DEALER);
+            Scanner in = new Scanner(System.in);
+            ZMQ.Socket worker = context.createSocket(SocketType.REQ);
 
             worker.connect("tcp://localhost:5671");
-            Random    rand        = new Random();
+
             int total = 0;
             while (true) {
                 //  Tell the broker we're ready for work
-                worker.sendMore("");
-                worker.send("Hi Boss");
+                String s = in.nextLine();
+                worker.send(s);
 
                 //  Get workload from broker, until finished
-                worker.recvStr(); //  Envelope delimiter
                 String workload = worker.recvStr();
                 boolean finished = workload.equals("Fired!");
                 if (finished) {
@@ -34,16 +34,10 @@ public class Client extends Thread {
                 //  Do some random work
                 try {
                     Thread.sleep(rand.nextInt(500) + 1);
-                } catch (InterruptedException e) {
+                }
+                catch (InterruptedException e) {
                 }
             }
-        }
-    }
-
-    public static void main(String[] args){
-        for (int workerNbr = 0; workerNbr < 2; workerNbr++) {
-            Thread worker = new Client();
-            worker.start();
         }
     }
 }

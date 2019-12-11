@@ -25,6 +25,8 @@ public class Client {
                 //  Get workload from broker, until finished
                 String workload = worker.recvStr();
                 System.out.println(workload);
+                workload = worker.recvStr();
+                System.out.println(workload);
 //                boolean finished = workload.equals("Fired!");
 //                if (finished) {
 //                    System.out.printf("Completed: %d tasks\n", total);

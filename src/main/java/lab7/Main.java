@@ -27,18 +27,11 @@ public class Main
             broker.bind("tcp://*:5671");
 
             //  Run for five seconds and then tell workers to end
-            long endTime = System.currentTimeMillis() + 5000;
-            int workersFired = 0;
-            while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
                 //  Next message gives us least recently used worker
                 String identity = broker.recvStr();
                 System.out.println(identity);
-                broker.sendMore(identity);
-                String a = broker.recvStr(); //  Envelope delimiter
-                System.out.println(a);
-                String b = broker.recvStr(); //  Response from worker
-                System.out.println(b);
-                broker.sendMore("");
+                broker.send(identity);
                 //  Encourage workers until it's time to fire them
 //                if (System.currentTimeMillis() < endTime)
 //                    broker.send("Work harder");

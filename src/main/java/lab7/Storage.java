@@ -7,7 +7,7 @@ import org.zeromq.ZMsg;
 
 public class Storage
 {
-    public void main(String[] args)
+    public static void main(String[] args)
     {
         try (ZContext ctx = new ZContext()) {
             ZMQ.Socket worker = ctx.createSocket(SocketType.DEALER);

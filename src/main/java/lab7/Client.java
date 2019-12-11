@@ -20,7 +20,7 @@ public class Client {
             while (true) {
                 //  Tell the broker we're ready for work
                 String s = in.nextLine();
-                worker.send(s);
+                worker.send("Hi Boss");
 
                 //  Get workload from broker, until finished
                 String workload = worker.recvStr();

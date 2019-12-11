@@ -70,8 +70,8 @@ public class Main
                 worker.connect("tcp://localhost:5556");
                 while (!Thread.currentThread().isInterrupted()) {
                     ZMsg msg = ZMsg.recvMsg(worker);
-                    String s = msg.popString();
-                    System.out.println(s);
+                    //String s = msg.popString();
+                    System.out.println(msg);
                     msg.send(worker);
                 }
             }

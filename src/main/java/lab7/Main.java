@@ -51,7 +51,7 @@ public class Main
                     if (msg.popString().equals("INFO")){
                         int left = Integer.parseInt(msg.popString());
                         int right = Integer.parseInt(msg.popString());
-                        storages.put(address, new Pair<Integer,Integer>(left,right));
+                        storages.put(address, new Pair<>(left,right));
                         System.out.println(address.toString() + "--" + left + "--" + right);
                     }
 

@@ -19,21 +19,23 @@ public class Storage
             worker.setIdentity("W".getBytes(ZMQ.CHARSET));
             worker.connect("tcp://localhost:5556");
             ZMQ.Poller poller = ctx.createPoller(1);
-            poller.register(worker, ZMQ.Poller.POLLOUT);
+            poller.register(worker, ZMQ.Poller.POLLIN);
             long start = System.currentTimeMillis();
             while (!Thread.currentThread().isInterrupted()) {
-                poller.poll();
+                poller.poll(5);
                 if (System.currentTimeMillis() - start > 5000) {
                     ZMsg msg = new ZMsg();
                     msg.addString(left + "-" + right);
                     msg.send(worker);
                     start = System.currentTimeMillis();
                 }
-                ZMsg msg = ZMsg.recvMsg(worker);
-                ZFrame content = msg.getLast();
-                String s = content.toString();
-                System.out.println(s);
-                msg.send(worker);
+                if (poller.pollin(0)) {
+                    ZMsg msg = ZMsg.recvMsg(worker);
+                    ZFrame content = msg.getLast();
+                    String s = content.toString();
+                    System.out.println(s);
+                    msg.send(worker);
+                }
             }
         }
     }

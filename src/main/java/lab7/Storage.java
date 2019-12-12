@@ -29,8 +29,8 @@ public class Storage
             System.out.println("Storage started");
             while (!Thread.currentThread().isInterrupted()) {
                 poller.poll(1);
-                //if (System.currentTimeMillis() - start > 5000) {
-                if (check){
+                if (System.currentTimeMillis() - start > 5000) {
+                //if (check){
                     check = false;
                     ZMsg msg1 = new ZMsg();
                     msg1.addLast("");

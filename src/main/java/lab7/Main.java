@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
  */
 public class Main
 {
-    private static HashMap<String, Pair<Integer,Integer>> storages;
+    private static HashMap<ZFrame, Pair<Integer,Integer>> storages;
 
     public static void main(String[] args)
     {
@@ -42,11 +42,10 @@ public class Main
                     //ZFrame address = msg.pop();
                     //address.destroy();
                     String[] strMsgArr = msg.getLast().toString().split(" ");
-                    for (Map.Entry<String, Pair<Integer,Integer>> entry : storages.entrySet()){
+                    for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()){
                         if (strMsgArr[0].equals("GET")) {
                             if (entry.getValue().getKey() <= Integer.parseInt(strMsgArr[1]) && entry.getValue().getValue() > Integer.parseInt(strMsgArr[1])) {
-                                ZFrame address = new ZFrame(entry.getKey());
-                                msg.wrap(address);
+                                msg.wrap(entry.getKey().duplicate());
                                 System.out.println(msg.peekFirst().toString());
                                 msg.send(backend);
                             }
@@ -58,7 +57,7 @@ public class Main
                     ZMsg msg = ZMsg.recvMsg(backend);
                     if (msg == null)
                         break; // Interrupted
-                    String address = msg.pop().toString();
+                    ZFrame address = msg.pop();
                     if (msg.popString().equals("INFO")){
                         int left = Integer.parseInt(msg.popString());
                         int right = Integer.parseInt(msg.popString());

@@ -27,8 +27,6 @@ public class Storage
                     ZMsg msg1 = new ZMsg();
                     msg1.addString(left + "-" + right);
                     msg1.send(worker);
-                    //worker.send(left + "-" + right);
-                    //poller.pollout(0);
                     start = System.currentTimeMillis();
                 }
                 if (poller.pollin(0)) {

@@ -32,8 +32,12 @@ public class Main
             ZMQ.Poller items = ctx.createPoller(2);
             items.register(frontend, ZMQ.Poller.POLLIN);
             items.register(backend, ZMQ.Poller.POLLIN);
-            long start = System.currentTimeMillis();
             while (!Thread.currentThread().isInterrupted()) {
+                    for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
+                        if (System.currentTimeMillis() - entry.getValue()[2] > 10){
+                            storages.remove(entry.getKey());
+                        }
+                    }
                 items.poll();
                 if (items.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(frontend);

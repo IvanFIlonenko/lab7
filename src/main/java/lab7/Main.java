@@ -46,6 +46,7 @@ public class Main
                         if (strMsgArr[0].equals("GET")) {
                             if (entry.getValue().getKey() <= Integer.parseInt(strMsgArr[1]) && entry.getValue().getValue() > Integer.parseInt(strMsgArr[1])) {
                                 msg.wrap(entry.getKey());
+                                System.out.println(msg.peekFirst().toString());
                                 msg.send(backend);
                             }
                         }

@@ -24,9 +24,9 @@ public class Storage
             while (!Thread.currentThread().isInterrupted()) {
                 poller.poll(1);
                 if (System.currentTimeMillis() - start > 100) {
-                    //ZMsg msg = new ZMsg();
-                    //msg.addString(left + "-" + right);
-                    //msg.send(worker);
+                    ZMsg msg = new ZMsg();
+                    msg.addString(left + "-" + right);
+                    msg.send(worker);
                     worker.send(left + "-" + right);
                     poller.pollout(0);
                     start = System.currentTimeMillis();

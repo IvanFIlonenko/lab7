@@ -41,6 +41,7 @@ public class Main
                         break; // Interrupted
                     //ZFrame address = msg.pop();
                     //address.destroy();
+                    ZFrame z = msg.unwrap();
                     Object[] arr = msg.toArray();
                     String s = (String)arr[2];
                     for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()){

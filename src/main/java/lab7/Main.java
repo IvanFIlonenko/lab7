@@ -40,7 +40,8 @@ public class Main
                         break; // Interrupted
                     //ZFrame address = msg.pop();
                     //address.destroy();
-                    //msg.addFirst(new ZFrame("W"));
+                    for ()
+                    msg.addFirst(new ZFrame("W"));
                     msg.send(backend);
                 }
 

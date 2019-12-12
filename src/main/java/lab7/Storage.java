@@ -43,8 +43,8 @@ public class Storage
                     if (strMsgArr[0].equals("GET")){
                         msg.addLast("VALUE=" + str.charAt(Integer.parseInt(strMsgArr[1])));
                     } else if(strMsgArr[0].equals("PUT")){
-                        str = replaceChar(str,strMsgArr[1],Integer.parseInt(strMsgArr[2]));
-                        msg.addLast("Value at position " + strMsgArr[2] + " was updated");
+                        str = replaceChar(str,strMsgArr[2],Integer.parseInt(strMsgArr[1]));
+                        msg.addLast("Value at position " + strMsgArr[1] + " was updated");
                     }
                     msg.send(worker);
                 }

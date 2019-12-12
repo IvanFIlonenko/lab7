@@ -41,8 +41,8 @@ public class Main
                         break; // Interrupted
                     //ZFrame address = msg.pop();
                     //address.destroy();
+                    String check = msg.pollLast().toString();
                     for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()){
-                        if msg.
                         msg.addFirst(new ZFrame("W"));
                         msg.send(backend);
                     }

@@ -1,8 +1,10 @@
 package lab7;
 
+import javafx.util.Pair;
 import org.zeromq.*;
 import org.zeromq.ZMQ.Socket;
 
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.stream.StreamSupport;
 
@@ -14,6 +16,8 @@ import java.util.stream.StreamSupport;
  */
 public class Main
 {
+    private static HashMap<ZFrame, Pair<Integer,Integer>> storages;
+
     public static void main(String[] args)
     {
         try (ZContext ctx = new ZContext()) {

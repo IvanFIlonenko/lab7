@@ -21,9 +21,12 @@ public class Storage
             ZMQ.Poller poller = ctx.createPoller(1);
             poller.register(worker, ZMQ.Poller.POLLIN);
             long start = System.currentTimeMillis();
+            boolean check = true;
             while (!Thread.currentThread().isInterrupted()) {
                 poller.poll(1);
-                if (System.currentTimeMillis() - start > 5000) {
+                //if (System.currentTimeMillis() - start > 5000) {
+                if (check){
+                    check = false;
                     ZMsg msg1 = new ZMsg();
                     msg1.addLast("INFO");
                     msg1.addLast(Integer.toString(left));

@@ -15,7 +15,6 @@ public class Client
         try (ZContext ctx = new ZContext()) {
             ZMQ.Socket client = ctx.createSocket(SocketType.REQ);
             client.setHWM(0);
-            client.setIdentity("C".getBytes(ZMQ.CHARSET));
             client.connect("tcp://localhost:5555");
             System.out.println("Setting up test");
 

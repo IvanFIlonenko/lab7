@@ -46,9 +46,9 @@ public class Storage
                     msg.unwrap();
                     String[] strMsgArr = msg.pollLast().toString().split(" ");
                     if (strMsgArr[0].equals("GET")){
-                        msg.addLast("VALUE=" + str.charAt(Integer.parseInt(strMsgArr[1])));
+                        msg.addLast("VALUE=" + str.charAt(Integer.parseInt(strMsgArr[1]) - left));
                     } else if(strMsgArr[0].equals("PUT")){
-                        str = replaceChar(str,strMsgArr[2],Integer.parseInt(strMsgArr[1]));
+                        str = replaceChar(str,strMsgArr[2],Integer.parseInt(strMsgArr[1]) - left);
                         msg.addLast("Value at position " + strMsgArr[1] + " was updated");
                     }
                     msg.send(worker);

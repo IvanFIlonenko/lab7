@@ -25,7 +25,7 @@ public class Main
             backend.bind("tcp://*:5556");
             ZMQ.Poller items = ctx.createPoller(2);
             items.register(frontend, ZMQ.Poller.POLLIN);
-            items.register(backend, ZMQ.Poller.POLLIN | ZMQ.Poller.POLLOUT);
+            items.register(backend, ZMQ.Poller.POLLIN);
 
             while (!Thread.currentThread().isInterrupted()) {
                 items.poll();

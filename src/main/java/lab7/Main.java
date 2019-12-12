@@ -43,7 +43,7 @@ public class Main
                 if (items.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(frontend);
                     if (msg == null)
-                        break; // Interrupted
+                        break;
                     String[] strMsgArr = msg.getLast().toString().split(" ");
                     boolean found = false;
                     for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
@@ -68,7 +68,7 @@ public class Main
                 if (items.pollin(1)) {
                     ZMsg msg = ZMsg.recvMsg(backend);
                     if (msg == null)
-                        break; // Interrupted
+                        break;
                     ZFrame address = msg.unwrap();
                     if (msg.getFirst().toString().equals("INFO")){
                         msg.pop();

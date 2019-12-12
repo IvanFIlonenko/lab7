@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
  threads.
 
  */
-public class Main
+public class Proxy
 {
     private static HashMap<ZFrame, long[]> storages;
 

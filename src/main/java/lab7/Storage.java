@@ -6,9 +6,6 @@ import java.util.Scanner;
 
 public class Storage
 {
-    private static String str;
-    private static int left;
-    private static int right;
     private static String LOCALHOST5556 = "tcp://localhost:5556";
     private static String STORAGE_STARTED = "Storage started";
     private static String NULL_STRING = "";
@@ -20,6 +17,10 @@ public class Storage
     private static String WAS_UPDATED = " was updated";
     private static String SPACE = " ";
     private static String MINUS = "-";
+
+    private static String str;
+    private static int left;
+    private static int right;
 
     public static void main(String[] args)
     {

@@ -34,7 +34,7 @@ public class Main
             items.register(backend, ZMQ.Poller.POLLIN);
             while (!Thread.currentThread().isInterrupted()) {
                     for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
-                        if (System.currentTimeMillis() - entry.getValue()[2] > 10){
+                        if (System.currentTimeMillis() - entry.getValue()[2] > 10000){
                             storages.remove(entry.getKey());
                         }
                     }

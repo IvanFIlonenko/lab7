@@ -12,7 +12,7 @@ public class Storage
     private static String LOCALHOST5556 = "tcp://localhost:5556";
     private static String STORAGE_STARTED = "Storage started";
     private static String NULL_STRING = "";
-    private static String INFO = "INFO";
+    private static String INFO = "NOTIFY";
     private static String GET = "GET";
     private static String VALUE_EQUALS = "VALUE=";
     private static String PUT = "PUT";

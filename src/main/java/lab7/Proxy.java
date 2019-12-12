@@ -1,33 +1,21 @@
 package lab7;
 
-import javafx.util.Pair;
 import org.zeromq.*;
 import org.zeromq.ZMQ.Socket;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.stream.StreamSupport;
 
-/**
 
- Round-trip demonstrator. Broker, Worker and Client are mocked as separate
- threads.
-
- */
 public class Proxy
 {
-    private static String = "tcp://*:5555";
-    private static String = "tcp://*:5556";
-    private static String = "Proxy started";
-    private static String = " ";
-    private static String = "GET";
-    private static String = "No value with such index";
-    private static String = "INFO";
-    private static String = "--";
-    private static String = "";
-    private static String = "";
-    private static String = "";
+    private static String TCP5555 = "tcp://*:5555";
+    private static String TCP5556 = "tcp://*:5556";
+    private static String PROXY_STARTED = "Proxy started";
+    private static String SPACE = " ";
+    private static String GET = "GET";
+    private static String NO_VALUE = "No value with such index";
+    private static String NOTIFY = "NOTIFY";
+    private static String DOUBLE_MINUS = "--";
 
     private static HashMap<ZFrame, long[]> storages;
 
@@ -39,12 +27,12 @@ public class Proxy
             Socket backend = ctx.createSocket(SocketType.ROUTER);
             frontend.setHWM(0);
             backend.setHWM(0);
-            frontend.bind("tcp://*:5555");
-            backend.bind("tcp://*:5556");
+            frontend.bind(TCP5555);
+            backend.bind(TCP5556);
             ZMQ.Poller items = ctx.createPoller(2);
             items.register(frontend, ZMQ.Poller.POLLIN);
             items.register(backend, ZMQ.Poller.POLLIN);
-            System.out.println("Proxy started");
+            System.out.println(PROXY_STARTED);
             while (!Thread.currentThread().isInterrupted()) {
                     for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
                         if (System.currentTimeMillis() - entry.getValue()[2] > 10000){
@@ -56,7 +44,7 @@ public class Proxy
                     ZMsg msg = ZMsg.recvMsg(frontend);
                     if (msg == null)
                         break;
-                    String[] strMsgArr = msg.getLast().toString().split(" ");
+                    String[] strMsgArr = msg.getLast().toString().split(SPACE);
                     boolean found = false;
                     for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
                         if (entry.getValue()[0] <= Integer.parseInt(strMsgArr[1]) && entry.getValue()[1] > Integer.parseInt(strMsgArr[1])) {
@@ -65,14 +53,14 @@ public class Proxy
                             }
                             found = true;
                             msg.send(backend);
-                            if (strMsgArr[0].equals("GET")) {
+                            if (strMsgArr[0].equals(GET)) {
                                 break;
                             }
                         }
                     }
                     if (!found){
                         msg.pollLast();
-                        msg.addLast("No value with such index");
+                        msg.addLast(NO_VALUE);
                         msg.send(frontend);
                     }
                 }
@@ -82,12 +70,12 @@ public class Proxy
                     if (msg == null)
                         break;
                     ZFrame address = msg.unwrap();
-                    if (msg.getFirst().toString().equals("INFO")){
+                    if (msg.getFirst().toString().equals(NOTIFY)){
                         msg.pop();
                         int left = Integer.parseInt(msg.popString());
                         int right = Integer.parseInt(msg.popString());
                         storages.put(address, new long[]{left,right,System.currentTimeMillis()});
-                        System.out.println(address.toString() + "--" + left + "--" + right);
+                        System.out.println(address.toString() + DOUBLE_MINUS + left + DOUBLE_MINUS + right);
                     }
 
                     else {

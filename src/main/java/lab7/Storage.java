@@ -34,7 +34,11 @@ public class Storage
                 }
                 if (poller.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(worker);
-                    
+                    msg.unwrap();
+                    String[] strMsgArr = msg.pollLast().toString().split(" ");
+                    if (strMsgArr[0].equals("GET")){
+                        msg.addLast("VALUE=" + str.charAt(Integer.parseInt(strMsgArr[1])));
+                    }
                     msg.send(worker);
                 }
             }

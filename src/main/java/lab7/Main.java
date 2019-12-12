@@ -32,6 +32,7 @@ public class Main
             ZMQ.Poller items = ctx.createPoller(2);
             items.register(frontend, ZMQ.Poller.POLLIN);
             items.register(backend, ZMQ.Poller.POLLIN);
+            System.out.println("Proxy started");
             while (!Thread.currentThread().isInterrupted()) {
                     for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
                         if (System.currentTimeMillis() - entry.getValue()[2] > 10000){

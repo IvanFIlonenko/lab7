@@ -26,6 +26,7 @@ public class Storage
             poller.register(worker, ZMQ.Poller.POLLIN);
             long start = System.currentTimeMillis();
             boolean check = true;
+            System.out.println("Storage started");
             while (!Thread.currentThread().isInterrupted()) {
                 poller.poll(1);
                 //if (System.currentTimeMillis() - start > 5000) {

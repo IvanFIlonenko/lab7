@@ -41,10 +41,15 @@ public class Main
                         break; // Interrupted
                     //ZFrame address = msg.pop();
                     //address.destroy();
-                    String strMsg = msg.getLast().toString();
+                    String[] strMsgArr = msg.getLast().toString().split(" ");
                     for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()){
-                        msg.addFirst(new ZFrame("W"));
-                        msg.send(backend);
+                        if (strMsgArr[0].equals("GET")) {
+                            if (entry.getValue().getKey() <= Integer.parseInt(strMsgArr[1]) && entry.getValue().getValue() > Integer.parseInt(strMsgArr[1])) {
+                                
+                                msg.addFirst(new ZFrame("W"));
+                                msg.send(backend);
+                            }
+                        }
                     }
                 }
 

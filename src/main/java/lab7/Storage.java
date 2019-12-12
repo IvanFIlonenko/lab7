@@ -28,6 +28,7 @@ public class Storage
                 if (check){
                     check = false;
                     ZMsg msg1 = new ZMsg();
+                    msg1.addLast("");
                     msg1.addLast("INFO");
                     msg1.addLast(Integer.toString(left));
                     msg1.addLast(Integer.toString(right));

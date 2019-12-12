@@ -42,12 +42,13 @@ public class Main
                     //ZFrame address = msg.pop();
                     //address.destroy();
                     String[] strMsgArr = msg.getLast().toString().split(" ");
-                    for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()){
-                        if (strMsgArr[0].equals("GET")) {
-                            if (entry.getValue().getKey() <= Integer.parseInt(strMsgArr[1]) && entry.getValue().getValue() > Integer.parseInt(strMsgArr[1])) {
-                                msg.wrap(entry.getKey().duplicate());
-                                System.out.println(msg.peekFirst().toString());
-                                msg.send(backend);
+                    for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()) {
+                        if (entry.getValue().getKey() <= Integer.parseInt(strMsgArr[1]) && entry.getValue().getValue() > Integer.parseInt(strMsgArr[1])) {
+                            msg.wrap(entry.getKey().duplicate());
+                            System.out.println(msg.peekFirst().toString());
+                            msg.send(backend);
+                            if (strMsgArr[0].equals("GET")) {
+                                break;
                             }
                         }
                     }

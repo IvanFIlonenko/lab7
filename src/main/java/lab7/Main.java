@@ -38,9 +38,6 @@ public class Main
                     ZMsg msg = ZMsg.recvMsg(frontend);
                     if (msg == null)
                         break; // Interrupted
-                    ZFrame address = msg.pop();
-                    address.destroy();
-                    msg.addFirst(new ZFrame("W"));
                     msg.send(backend);
                 }
 

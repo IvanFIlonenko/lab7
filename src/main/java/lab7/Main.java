@@ -68,7 +68,7 @@ public class Main
 
                     else {
                         System.out.println(msg.getLast().toString());
-                        msg.addFirst(new ZFrame("C"));
+                        //msg.addFirst(new ZFrame("C"));
                         msg.send(frontend);
                     }
                 }

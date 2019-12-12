@@ -23,7 +23,7 @@ public class Storage
             long start = System.currentTimeMillis();
             while (!Thread.currentThread().isInterrupted()) {
                 poller.poll(1);
-                if (System.currentTimeMillis() - start > 3000) {
+                if (System.currentTimeMillis() - start > 5000) {
                     ZMsg msg1 = new ZMsg();
                     msg1.addLast("INFO");
                     msg1.addLast(Integer.toString(left));
@@ -34,7 +34,7 @@ public class Storage
                 }
                 if (poller.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(worker);
-                    //msg.unwrap();
+                    msg.unwrap();
                     String[] strMsgArr = msg.pollLast().toString().split(" ");
                     if (strMsgArr[0].equals("GET")){
                         msg.addLast("VALUE=" + str.charAt(Integer.parseInt(strMsgArr[1])));

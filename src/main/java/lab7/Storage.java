@@ -24,8 +24,8 @@ public class Storage
             boolean check = true;
             while (!Thread.currentThread().isInterrupted()) {
                 poller.poll(1);
-                //if (System.currentTimeMillis() - start > 5000) {
-                if (check){
+                if (System.currentTimeMillis() - start > 5000) {
+                //if (check){
                     check = false;
                     ZMsg msg1 = new ZMsg();
                     msg1.addLast("");
@@ -42,10 +42,17 @@ public class Storage
                     String[] strMsgArr = msg.pollLast().toString().split(" ");
                     if (strMsgArr[0].equals("GET")){
                         msg.addLast("VALUE=" + str.charAt(Integer.parseInt(strMsgArr[1])));
+                    } else if(strMsgArr[0].equals("PUT")){
+                        str = replaceChar(str,strMsgArr[1],Integer.parseInt(strMsgArr[2]));
+                        msg.addLast("Value at position " + strMsgArr[2] + " was updated");
                     }
                     msg.send(worker);
                 }
             }
         }
+    }
+
+    public static String replaceChar(String str, String ch, int index) {
+        return str.substring(0, index) + ch + str.substring(index+1);
     }
 }

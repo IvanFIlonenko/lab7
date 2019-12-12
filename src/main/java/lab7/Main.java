@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
  */
 public class Main
 {
-    private static HashMap<ZFrame, Pair<Integer,Integer>> storages;
+    private static HashMap<ZFrame, long[]> storages;
 
     public static void main(String[] args)
     {
@@ -32,18 +32,16 @@ public class Main
             ZMQ.Poller items = ctx.createPoller(2);
             items.register(frontend, ZMQ.Poller.POLLIN);
             items.register(backend, ZMQ.Poller.POLLIN);
-
+            long start = System.currentTimeMillis();
             while (!Thread.currentThread().isInterrupted()) {
                 items.poll();
                 if (items.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(frontend);
                     if (msg == null)
                         break; // Interrupted
-                    //ZFrame address = msg.pop();
-                    //address.destroy();
                     String[] strMsgArr = msg.getLast().toString().split(" ");
-                    for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()) {
-                        if (entry.getValue().getKey() <= Integer.parseInt(strMsgArr[1]) && entry.getValue().getValue() > Integer.parseInt(strMsgArr[1])) {
+                    for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
+                        if (entry.getValue()[0] <= Integer.parseInt(strMsgArr[1]) && entry.getValue()[1] > Integer.parseInt(strMsgArr[1])) {
                             msg.wrap(entry.getKey().duplicate());
                             System.out.println(msg.peekFirst().toString());
                             msg.send(backend);
@@ -63,13 +61,12 @@ public class Main
                         msg.pop();
                         int left = Integer.parseInt(msg.popString());
                         int right = Integer.parseInt(msg.popString());
-                        storages.put(address, new Pair<>(left,right));
+                        storages.put(address, new long[]{left,right,System.currentTimeMillis()});
                         System.out.println(address.toString() + "--" + left + "--" + right);
                     }
 
                     else {
                         System.out.println(msg.getLast().toString());
-                        //msg.addFirst(new ZFrame("C"));
                         msg.send(frontend);
                     }
                 }

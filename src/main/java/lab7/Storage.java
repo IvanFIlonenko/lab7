@@ -22,7 +22,7 @@ public class Storage
             poller.register(worker, ZMQ.Poller.POLLIN);
             long start = System.currentTimeMillis();
             while (!Thread.currentThread().isInterrupted()) {
-                poller.poll();
+                poller.poll(1);
                 if (System.currentTimeMillis() - start > 5000) {
                     //ZMsg msg = new ZMsg();
                     //msg.addString(left + "-" + right);

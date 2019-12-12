@@ -28,7 +28,7 @@ public class Main
             items.register(backend, ZMQ.Poller.POLLIN);
 
             while (!Thread.currentThread().isInterrupted()) {
-                items.poll();
+                items.poll(1);
                 if (items.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(frontend);
                     if (msg == null)

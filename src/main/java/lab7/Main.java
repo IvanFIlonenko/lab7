@@ -41,9 +41,7 @@ public class Main
                         break; // Interrupted
                     //ZFrame address = msg.pop();
                     //address.destroy();
-                    ZFrame z = msg.unwrap();
-                    Object[] arr = msg.toArray();
-                    String s = (String)arr[2];
+                    String strMsg = msg.getLast().toString();
                     for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()){
                         msg.addFirst(new ZFrame("W"));
                         msg.send(backend);

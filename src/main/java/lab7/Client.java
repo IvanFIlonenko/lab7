@@ -29,7 +29,6 @@ public class Client
                 }
                 ZMsg req = new ZMsg();
                 req.addString(message);
-                req.addString("Check");
                 req.send(client);
                 ZMsg ans = ZMsg.recvMsg(client);
                 String s = ans.popString();

@@ -45,8 +45,10 @@ public class Main
                     if (msg == null)
                         break; // Interrupted
                     String[] strMsgArr = msg.getLast().toString().split(" ");
+                    boolean found = false;
                     for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
                         if (entry.getValue()[0] <= Integer.parseInt(strMsgArr[1]) && entry.getValue()[1] > Integer.parseInt(strMsgArr[1])) {
+                            found = true;
                             msg.wrap(entry.getKey().duplicate());
                             System.out.println(msg.peekFirst().toString());
                             msg.send(backend);
@@ -54,6 +56,11 @@ public class Main
                                 break;
                             }
                         }
+                    }
+                    if (!found){
+                        msg.pollLast();
+                        msg.addLast("No value with such index");
+                        msg.send(frontend);
                     }
                 }
 

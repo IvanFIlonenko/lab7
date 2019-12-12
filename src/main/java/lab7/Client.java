@@ -9,23 +9,21 @@ import java.util.Scanner;
 
 public class Client
 {
+    private static String TCP5555 = "tcp://localhost:5555";
+    private static String CLIENT_STARTED = "Client Started";
 
     public static void main(String[] args)
     {
         try (ZContext ctx = new ZContext()) {
             ZMQ.Socket client = ctx.createSocket(SocketType.REQ);
             client.setHWM(0);
-            client.connect("tcp://localhost:5555");
-            System.out.println("Setting up test");
+            client.connect(TCP5555);
 
-            System.out.println("Client Started");
+            System.out.println(CLIENT_STARTED);
 
             Scanner in = new Scanner(System.in);
             while (true) {
                 String message = in.nextLine();
-                if (message.equals("Stop")) {
-                    break;
-                }
                 ZMsg req = new ZMsg();
                 req.addString(message);
                 req.send(client);

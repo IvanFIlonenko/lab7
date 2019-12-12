@@ -34,12 +34,7 @@ public class Storage
                 }
                 if (poller.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(worker);
-//                    ZFrame content = msg.getLast();
-//                    String s = content.toString();
-//                    System.out.println(s);
-                    System.out.println(msg.popString());
-                    System.out.println(msg.popString());
-                    System.out.println(msg.popString());
+                    
                     msg.send(worker);
                 }
             }

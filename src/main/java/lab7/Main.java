@@ -45,8 +45,7 @@ public class Main
                     for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()){
                         if (strMsgArr[0].equals("GET")) {
                             if (entry.getValue().getKey() <= Integer.parseInt(strMsgArr[1]) && entry.getValue().getValue() > Integer.parseInt(strMsgArr[1])) {
-                                
-                                msg.addFirst(new ZFrame("W"));
+                                msg.wrap(entry.getKey());
                                 msg.send(backend);
                             }
                         }

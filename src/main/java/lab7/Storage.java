@@ -34,6 +34,9 @@ public class Storage
                 }
                 if (poller.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(worker);
+                    System.out.println(msg.popString());
+                    System.out.println(msg.popString());
+                    System.out.println(msg.popString());
                     msg.unwrap();
                     String[] strMsgArr = msg.pollLast().toString().split(" ");
                     if (strMsgArr[0].equals("GET")){

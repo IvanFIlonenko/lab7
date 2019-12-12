@@ -48,10 +48,13 @@ public class Main
                     if (msg == null)
                         break; // Interrupted
                     ZFrame address = msg.pop();
-                    address.destroy();
-                    String s = msg.getLast().toString();
-                    if (s.equals("0-10"))
-                        System.out.println(s);
+                    if (msg.popString().equals("INFO")){
+                        int left = Integer.parseInt(msg.popString());
+                        int right = Integer.parseInt(msg.popString());
+                        storages.put(address, new Pair<Integer,Integer>(left,right));
+                        System.out.println(address.toString() + "--" + left + "--" + right);
+                    }
+
                     else {
                         System.out.println(msg.getLast().toString());
                         msg.addFirst(new ZFrame("C"));

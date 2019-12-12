@@ -25,6 +25,9 @@ public class Storage
                 poller.poll(1);
                 if (System.currentTimeMillis() - start > 3000) {
                     ZMsg msg1 = new ZMsg();
+                    msg1.addLast("INFO");
+                    msg1.addLast(Integer.toString(left));
+                    msg1.addLast(Integer.toString(right));
                     msg1.addString(left + "-" + right);
                     msg1.send(worker);
                     start = System.currentTimeMillis();

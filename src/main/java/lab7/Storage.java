@@ -18,26 +18,26 @@ public class Storage
             worker.setHWM(0);
             worker.setIdentity("W".getBytes(ZMQ.CHARSET));
             worker.connect("tcp://localhost:5556");
-            ZMQ.Poller poller = ctx.createPoller(1);
-            poller.register(worker, ZMQ.Poller.POLLIN);
+            //ZMQ.Poller poller = ctx.createPoller(1);
+            //poller.register(worker, ZMQ.Poller.POLLIN);
             long start = System.currentTimeMillis();
             while (!Thread.currentThread().isInterrupted()) {
-                poller.poll(1);
+                //poller.poll(1);
                 if (System.currentTimeMillis() - start > 100) {
-                    ZMsg msg = new ZMsg();
-                    msg.addString(left + "-" + right);
-                    msg.send(worker);
-                    worker.send(left + "-" + right);
-                    poller.pollout(0);
-                    start = System.currentTimeMillis();
+                    ZMsg msg1 = new ZMsg();
+                    msg1.addString(left + "-" + right);
+                    msg1.send(worker);
+                    //worker.send(left + "-" + right);
+                    //poller.pollout(0);
+                    //start = System.currentTimeMillis();
                 }
-                if (poller.pollin(0)) {
-                    ZMsg msg = ZMsg.recvMsg(worker);
-                    ZFrame content = msg.getLast();
-                    String s = content.toString();
-                    System.out.println(s);
-                    msg.send(worker);
-                }
+                //if (poller.pollin(0)) {
+                    //ZMsg msg = ZMsg.recvMsg(worker);
+                    //ZFrame content = msg.getLast();
+                    //String s = content.toString();
+                    //System.out.println(s);
+                    //msg.send(worker);
+                //}
             }
         }
     }

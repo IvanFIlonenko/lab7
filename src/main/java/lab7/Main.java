@@ -57,8 +57,9 @@ public class Main
                     ZMsg msg = ZMsg.recvMsg(backend);
                     if (msg == null)
                         break; // Interrupted
-                    ZFrame address = msg.pop();
-                    if (msg.popString().equals("INFO")){
+                    ZFrame address = msg.unwrap();
+                    if (msg.getFirst().toString().equals("INFO")){
+                        msg.pop();
                         int left = Integer.parseInt(msg.popString());
                         int right = Integer.parseInt(msg.popString());
                         storages.put(address, new Pair<>(left,right));

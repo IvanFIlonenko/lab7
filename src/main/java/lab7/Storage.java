@@ -37,7 +37,8 @@ public class Storage
                     System.out.println(msg.popString());
                     System.out.println(msg.popString());
                     System.out.println(msg.popString());
-                    msg.unwrap();
+                    System.out.println(msg.popString());
+                    //msg.unwrap();
                     String[] strMsgArr = msg.pollLast().toString().split(" ");
                     if (strMsgArr[0].equals("GET")){
                         msg.addLast("VALUE=" + str.charAt(Integer.parseInt(strMsgArr[1])));

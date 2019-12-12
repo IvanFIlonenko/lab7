@@ -5,6 +5,7 @@ import org.zeromq.*;
 import org.zeromq.ZMQ.Socket;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.StreamSupport;
 
@@ -40,9 +41,11 @@ public class Main
                         break; // Interrupted
                     //ZFrame address = msg.pop();
                     //address.destroy();
-                    for ()
-                    msg.addFirst(new ZFrame("W"));
-                    msg.send(backend);
+                    for (Map.Entry<ZFrame, Pair<Integer,Integer>> entry : storages.entrySet()){
+                        if msg.
+                        msg.addFirst(new ZFrame("W"));
+                        msg.send(backend);
+                    }
                 }
 
                 if (items.pollin(1)) {

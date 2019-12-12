@@ -32,6 +32,7 @@ public class Storage
                     msg1.addLast(Integer.toString(left));
                     msg1.addLast(Integer.toString(right));
                     msg1.addString(left + "-" + right);
+                    msg1.wrap(new ZFrame(""));
                     msg1.send(worker);
                     start = System.currentTimeMillis();
                 }

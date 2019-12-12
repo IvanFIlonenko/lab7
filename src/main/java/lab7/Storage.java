@@ -16,7 +16,7 @@ public class Storage
         try (ZContext ctx = new ZContext()) {
             ZMQ.Socket worker = ctx.createSocket(SocketType.DEALER);
             worker.setHWM(0);
-            worker.setIdentity("W".getBytes(ZMQ.CHARSET));
+            //worker.setIdentity("W".getBytes(ZMQ.CHARSET));
             worker.connect("tcp://localhost:5556");
             ZMQ.Poller poller = ctx.createPoller(1);
             poller.register(worker, ZMQ.Poller.POLLIN);

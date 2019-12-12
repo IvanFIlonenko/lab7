@@ -2,6 +2,8 @@ package lab7;
 
 import org.zeromq.*;
 
+import java.util.Scanner;
+
 public class Storage
 {
     private static String str;
@@ -10,9 +12,11 @@ public class Storage
 
     public static void main(String[] args)
     {
-        left = Integer.parseInt(args[1]);
-        right = Integer.parseInt(args[2]);
-        str = args[0].substring(left, right);
+        Scanner in = new Scanner(System.in);
+        String temp = in.nextLine();
+        left = Integer.parseInt(in.nextLine());
+        right = Integer.parseInt(in.nextLine());
+        str = temp.substring(left, right);
         try (ZContext ctx = new ZContext()) {
             ZMQ.Socket worker = ctx.createSocket(SocketType.DEALER);
             worker.setHWM(0);

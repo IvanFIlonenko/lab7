@@ -48,9 +48,10 @@ public class Main
                     boolean found = false;
                     for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
                         if (entry.getValue()[0] <= Integer.parseInt(strMsgArr[1]) && entry.getValue()[1] > Integer.parseInt(strMsgArr[1])) {
+                            if (!found) {
+                                msg.wrap(entry.getKey().duplicate());
+                            }
                             found = true;
-                            msg.wrap(entry.getKey().duplicate());
-                            System.out.println(msg.peekFirst().toString());
                             msg.send(backend);
                             if (strMsgArr[0].equals("GET")) {
                                 break;

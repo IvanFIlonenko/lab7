@@ -17,6 +17,18 @@ import java.util.stream.StreamSupport;
  */
 public class Proxy
 {
+    private static String = "tcp://*:5555";
+    private static String = "tcp://*:5556";
+    private static String = "Proxy started";
+    private static String = " ";
+    private static String = "GET";
+    private static String = "No value with such index";
+    private static String = "INFO";
+    private static String = "--";
+    private static String = "";
+    private static String = "";
+    private static String = "";
+
     private static HashMap<ZFrame, long[]> storages;
 
     public static void main(String[] args)

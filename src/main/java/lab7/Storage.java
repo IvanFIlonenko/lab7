@@ -23,13 +23,13 @@ public class Storage
             long start = System.currentTimeMillis();
             while (!Thread.currentThread().isInterrupted()) {
                 poller.poll(1);
-                if (System.currentTimeMillis() - start > 5000) {
+                if (System.currentTimeMillis() - start > 3000) {
                     ZMsg msg1 = new ZMsg();
                     msg1.addString(left + "-" + right);
                     msg1.send(worker);
                     //worker.send(left + "-" + right);
                     //poller.pollout(0);
-                    //start = System.currentTimeMillis();
+                    start = System.currentTimeMillis();
                 }
                 if (poller.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(worker);

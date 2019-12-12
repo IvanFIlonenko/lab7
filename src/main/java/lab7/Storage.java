@@ -35,7 +35,7 @@ public class Storage
                     msg1.send(worker);
                     start = System.currentTimeMillis();
                 }
-                //if (poller.pollin(0)) {
+                if (poller.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(worker);
                     msg.unwrap();
                     String[] strMsgArr = msg.pollLast().toString().split(" ");
@@ -43,7 +43,7 @@ public class Storage
                         msg.addLast("VALUE=" + str.charAt(Integer.parseInt(strMsgArr[1])));
                     }
                     msg.send(worker);
-                //}
+                }
             }
         }
     }

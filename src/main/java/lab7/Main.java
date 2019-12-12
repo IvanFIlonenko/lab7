@@ -20,6 +20,7 @@ public class Main
 
     public static void main(String[] args)
     {
+        storages = new HashMap<>();
         try (ZContext ctx = new ZContext()) {
             Socket frontend = ctx.createSocket(SocketType.ROUTER);
             Socket backend = ctx.createSocket(SocketType.ROUTER);

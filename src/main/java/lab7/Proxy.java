@@ -17,7 +17,7 @@ public class Proxy
     private static String NOTIFY = "NOTIFY";
     private static String DOUBLE_MINUS = "--";
 
-    private static HashMap<ZFrame, long[]> storages;
+    private static HashMap<ZFrame, StorageData> storages;
 
     public static void main(String[] args)
     {
@@ -34,8 +34,8 @@ public class Proxy
             items.register(backend, ZMQ.Poller.POLLIN);
             System.out.println(PROXY_STARTED);
             while (!Thread.currentThread().isInterrupted()) {
-                    for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
-                        if (System.currentTimeMillis() - entry.getValue()[2] > 10000){
+                    for (Map.Entry<ZFrame, StorageData> entry : storages.entrySet()) {
+                        if (System.currentTimeMillis() - entry.getValue().getTime() > 10000){
                             storages.remove(entry.getKey());
                         }
                     }
@@ -46,8 +46,8 @@ public class Proxy
                         break;
                     String[] strMsgArr = msg.getLast().toString().split(SPACE);
                     boolean found = false;
-                    for (Map.Entry<ZFrame, long[]> entry : storages.entrySet()) {
-                        if (entry.getValue()[0] <= Integer.parseInt(strMsgArr[1]) && entry.getValue()[1] > Integer.parseInt(strMsgArr[1])) {
+                    for (Map.Entry<ZFrame, StorageData> entry : storages.entrySet()) {
+                        if (entry.getValue().getLeft() <= Integer.parseInt(strMsgArr[1]) && entry.getValue().getRight() > Integer.parseInt(strMsgArr[1])) {
                             if (!found) {
                                 msg.wrap(entry.getKey().duplicate());
                             }
@@ -74,7 +74,7 @@ public class Proxy
                         msg.pop();
                         int left = Integer.parseInt(msg.popString());
                         int right = Integer.parseInt(msg.popString());
-                        storages.put(address, new long[]{left,right,System.currentTimeMillis()});
+                        storages.put(address, new StorageData(left,right,System.currentTimeMillis()));
                         System.out.println(address.toString() + DOUBLE_MINUS + left + DOUBLE_MINUS + right);
                     }
 

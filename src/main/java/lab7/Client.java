@@ -7,13 +7,11 @@ import org.zeromq.ZMsg;
 
 import java.util.Scanner;
 
-public class Client
-{
+public class Client {
     private static String TCP5555 = "tcp://localhost:5555";
     private static String CLIENT_STARTED = "Client Started";
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         try (ZContext ctx = new ZContext()) {
             ZMQ.Socket client = ctx.createSocket(SocketType.REQ);
             client.setHWM(0);

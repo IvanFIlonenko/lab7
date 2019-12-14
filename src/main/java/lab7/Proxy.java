@@ -6,8 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Proxy
-{
+public class Proxy {
     private static String TCP5555 = "tcp://*:5555";
     private static String TCP5556 = "tcp://*:5556";
     private static String PROXY_STARTED = "Proxy started";
@@ -19,8 +18,7 @@ public class Proxy
 
     private static HashMap<ZFrame, StorageData> storages;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         storages = new HashMap<>();
         try (ZContext ctx = new ZContext()) {
             Socket frontend = ctx.createSocket(SocketType.ROUTER);
@@ -34,11 +32,11 @@ public class Proxy
             items.register(backend, ZMQ.Poller.POLLIN);
             System.out.println(PROXY_STARTED);
             while (!Thread.currentThread().isInterrupted()) {
-                    for (Map.Entry<ZFrame, StorageData> entry : storages.entrySet()) {
-                        if (System.currentTimeMillis() - entry.getValue().getTime() > 10000){
-                            storages.remove(entry.getKey());
-                        }
-                    }
+//                for (Map.Entry<ZFrame, StorageData> entry : storages.entrySet()) {
+//                    if (System.currentTimeMillis() - entry.getValue().getTime() > 10000) {
+//                        storages.remove(entry.getKey());
+//                    }
+//                }
                 items.poll();
                 if (items.pollin(0)) {
                     ZMsg msg = ZMsg.recvMsg(frontend);
@@ -49,6 +47,10 @@ public class Proxy
                     for (Map.Entry<ZFrame, StorageData> entry : storages.entrySet()) {
                         if (entry.getValue().getLeft() <= Integer.parseInt(strMsgArr[1]) && entry.getValue().getRight() > Integer.parseInt(strMsgArr[1])) {
                             if (!found) {
+                                if (System.currentTimeMillis() - entry.getValue().getTime() > 10000){
+                                    storages.remove(entry.getKey());
+                                    continue;
+                                }
                                 msg.wrap(entry.getKey().duplicate());
                             }
                             found = true;
@@ -58,7 +60,7 @@ public class Proxy
                             }
                         }
                     }
-                    if (!found){
+                    if (!found) {
                         msg.pollLast();
                         msg.addLast(NO_VALUE);
                         msg.send(frontend);
@@ -70,15 +72,13 @@ public class Proxy
                     if (msg == null)
                         break;
                     ZFrame address = msg.unwrap();
-                    if (msg.getFirst().toString().equals(NOTIFY)){
+                    if (msg.getFirst().toString().equals(NOTIFY)) {
                         msg.pop();
                         int left = Integer.parseInt(msg.popString());
                         int right = Integer.parseInt(msg.popString());
-                        storages.put(address, new StorageData(left,right,System.currentTimeMillis()));
+                        storages.put(address, new StorageData(left, right, System.currentTimeMillis()));
                         System.out.println(address.toString() + DOUBLE_MINUS + left + DOUBLE_MINUS + right);
-                    }
-
-                    else {
+                    } else {
                         System.out.println(msg.getLast().toString());
                         msg.send(frontend);
                     }

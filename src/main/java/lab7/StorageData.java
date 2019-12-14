@@ -15,15 +15,15 @@ public class StorageData {
         return time;
     }
 
-    public int getLeft(){
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public int getLeft() {
         return left;
     }
 
     public int getRight() {
         return right;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
     }
 }

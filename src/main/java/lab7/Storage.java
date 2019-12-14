@@ -4,8 +4,7 @@ import org.zeromq.*;
 
 import java.util.Scanner;
 
-public class Storage
-{
+public class Storage {
     private static String LOCALHOST5556 = "tcp://localhost:5556";
     private static String STORAGE_STARTED = "Storage started";
     private static String NULL_STRING = "";
@@ -22,8 +21,7 @@ public class Storage
     private static int left;
     private static int right;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         String temp = in.nextLine();
         left = Integer.parseInt(in.nextLine());
@@ -53,10 +51,10 @@ public class Storage
                     ZMsg msg = ZMsg.recvMsg(storage);
                     msg.unwrap();
                     String[] strMsgArr = msg.pollLast().toString().split(SPACE);
-                    if (strMsgArr[0].equals(GET)){
+                    if (strMsgArr[0].equals(GET)) {
                         msg.addLast(VALUE_EQUALS + str.charAt(Integer.parseInt(strMsgArr[1]) - left));
-                    } else if(strMsgArr[0].equals(PUT)){
-                        str = replaceChar(str,strMsgArr[2],Integer.parseInt(strMsgArr[1]) - left);
+                    } else if (strMsgArr[0].equals(PUT)) {
+                        str = replaceChar(str, strMsgArr[2], Integer.parseInt(strMsgArr[1]) - left);
                         msg.addLast(VALUE_AT_POS + strMsgArr[1] + WAS_UPDATED);
                     }
                     msg.send(storage);
@@ -66,6 +64,6 @@ public class Storage
     }
 
     public static String replaceChar(String str, String ch, int index) {
-        return str.substring(0, index) + ch + str.substring(index+1);
+        return str.substring(0, index) + ch + str.substring(index + 1);
     }
 }
